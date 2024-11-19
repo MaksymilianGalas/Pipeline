@@ -11,6 +11,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.lumo.LumoUtility.Gap;
 import jakarta.annotation.security.PermitAll;
 
+
 @PageTitle("Widok")
 @Route("my-view")
 @Menu(order = 1, icon = "line-awesome/svg/pencil-ruler-solid.svg")
@@ -33,6 +34,13 @@ public class WidokView extends Composite<VerticalLayout> {
         buttonPrimary.setText("Wciśnij mnie");
         buttonPrimary.setWidth("min-content");
         buttonPrimary.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+
+        buttonPrimary.addClickListener(event -> {
+            String url = "https://www.youtube.com/watch?v=xvFZjo5PgG0"; 
+            getUI().ifPresent(ui -> ui.getPage().open(url));
+        });
+
+
         getContent().add(layoutRow);
         layoutRow.add(layoutColumn3);
         layoutRow.add(layoutColumn2);

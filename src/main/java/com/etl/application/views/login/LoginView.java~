@@ -38,7 +38,7 @@ public class LoginView extends LoginOverlay implements BeforeEnterObserver {
         if (authenticatedUser.get().isPresent()) {
 
             setOpened(false);
-            event.forwardTo("Widok");
+            event.forwardTo("my-view");
         }
 
         setError(event.getLocation().getQueryParameters().getParameters().containsKey("error"));
