@@ -45,17 +45,20 @@ Once the JAR file is built, you can run it using
 - Report issues, create pull requests in [GitHub](https://github.com/vaadin).
 
 
-## Deploying using Docker
+## Building Docker
 
 To build the Dockerized version of the project, run
 
-```
-mvn clean package -Pproduction
-docker build . -t etl-app:latest
-```
+docker build -t <container_name>:<version_tag>
 
-Once the Docker image is correctly built, you can test it locally using
+For example:
 
-```
-docker run -p 8080:8080 etl-app:latest
-```
+docker build -t xd:xd1
+
+## Deploy using docker
+
+To deploy app using docker run:
+
+docker compose up -d 
+
+But remember to chanche application container name and tag mention in "Building Docker" section in docker-compose.yml file
