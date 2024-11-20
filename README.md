@@ -49,16 +49,16 @@ Once the JAR file is built, you can run it using
 
 To build the Dockerized version of the project, run
 
-docker build -t <container_name>:<version_tag>
+`docker build -t <container_name>:<version_tag>`
 
 For example:
 
-docker build -t xd:xd1
+`docker build -t xd:xd1`
 
 ## Deploy using docker
 
 To deploy app using docker run:
 
-docker compose up -d 
+`docker compose up -d`
 
-But remember to chanche application container name and tag mention in "Building Docker" section in docker-compose.yml file
+But remember to chanche application container name and tag mention in `"Building Docker"` section in` docker-compose.yml` file
