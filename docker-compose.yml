@@ -11,7 +11,7 @@ services:
       - POSTGRES_DB=admin
 
   aplikacja:
-    image: xd:xd4
+    image: maks0x073/etl-app
     ports:
       - 8080:8080
     depends_on:
