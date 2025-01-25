@@ -2,6 +2,7 @@ package com.etl.application.views;
 
 import com.etl.application.data.User;
 import com.etl.application.security.AuthenticatedUser;
+import com.etl.application.views.widok.WeatherView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -73,6 +74,7 @@ public class MainLayout extends AppLayout {
     private SideNav createNavigation() {
         SideNav nav = new SideNav();
 
+        // Dodanie istniejących pozycji menu
         List<MenuEntry> menuEntries = MenuConfiguration.getMenuEntries();
         menuEntries.forEach(entry -> {
             if (entry.icon() != null) {
@@ -82,8 +84,12 @@ public class MainLayout extends AppLayout {
             }
         });
 
+        // Dodanie pozycji do WeatherView
+        nav.addItem(new SideNavItem("Weather Data", WeatherView.class)); // Nazwa zakładki i klasa widoku
+
         return nav;
     }
+
 
     private Footer createFooter() {
         Footer layout = new Footer();

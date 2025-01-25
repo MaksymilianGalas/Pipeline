@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather Application</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"></script>
+  <script>
+    window.updateMap = function (latitude, longitude) {
+      if (window.map) {
+        window.map.setView([latitude, longitude], 13);
+      } else {
+        window.map = L.map('map').setView([latitude, longitude], 13);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          maxZoom: 19,
+        }).addTo(window.map);
+        L.marker([latitude, longitude]).addTo(window.map);
+      }
+    }
+    console.log("JavaScript loaded successfully");
+
+  </script>
+</head>
+<body>
+<div id="map" style="width: 800px; height: 400px;"></div>
+</body>
+</html>
