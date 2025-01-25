@@ -1,0 +1,18 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:16
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_USER=admin
+      - POSTGRES_DB=admin
+
+  aplikacja:
+    image: maks0x073/etl-app
+    ports:
+      - 8080:8080
+    depends_on:
+      - postgres
