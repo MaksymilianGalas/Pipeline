@@ -2,13 +2,13 @@ package com.etl.application.views.widok;
 
 import com.etl.application.data.HBaseConnection;
 import com.etl.application.data.WeatherData;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.grid.Grid;
+import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Span;
-import com.vaadin.flow.component.map.Map;
-import com.vaadin.flow.component.map.configuration.Coordinate;
 import com.vaadin.flow.component.menubar.MenuBar;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.Route;
@@ -32,17 +32,32 @@ import java.util.stream.Collectors;
 public class WeatherView extends VerticalLayout {
 
     private final Grid<WeatherData> weatherGrid = new Grid<>(WeatherData.class);
-    private final Map map = new Map();
+    Div mapDiv = new Div();
+
     private List<WeatherData> allWeatherData = new ArrayList<>();
     private List<WeatherData> latestWeatherData = new ArrayList<>();
 
     public WeatherView() {
 
-        map.setHeight("400px");
-        map.setWidth("800px");
-
-
+        mapDiv.setId("map");
+        mapDiv.setWidth("800px");
+        mapDiv.setHeight("400px");
+        add(mapDiv);
         MenuBar menuBar = createMapControls();
+        //    korzystaliśmy z map vaadinowych, ale były płatne wiec uzyliśmy kawałka gotowego kodu
+        UI.getCurrent().getPage().executeJs("""
+    // Inicjalizacja mapy Leaflet.js
+    var map = L.map('map').setView([51.505, -0.09], 13);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19
+    }).addTo(map);
+
+    // Definicja funkcji updateMap do przesuwania mapy
+    window.updateMap = function(lat, lng) {
+        map.setView([lat, lng], 13); // Przestaw widok na nowe współrzędne
+    };
+""");
+
 
 
         weatherGrid.setColumns("locationName", "temperatureC", "humidity", "conditionText", "windSpeed", "pressure", "visibility");
@@ -57,7 +72,7 @@ public class WeatherView extends VerticalLayout {
         });
 
 
-        add(new Span("Weather Data"), dateFilter, weatherGrid, map, menuBar);
+        add(new Span("Weather Data"), dateFilter, weatherGrid, mapDiv, menuBar);
 
 
         allWeatherData = fetchWeatherDataFromHBase();
@@ -231,10 +246,9 @@ public class WeatherView extends VerticalLayout {
     }
 
     private void moveMapToLocation(double latitude, double longitude) {
-        Coordinate coordinate = new Coordinate(longitude, latitude);
-        map.getView().setCenter(coordinate);
-        map.getView().setZoom(10);
+        UI.getCurrent().getPage().executeJs("updateMap($0, $1)", latitude, longitude);
     }
+
 
     private MenuBar createMapControls() {
         MenuBar menuBar = new MenuBar();
@@ -244,8 +258,6 @@ public class WeatherView extends VerticalLayout {
         moveToSubMenu.addItem("Paris", e -> moveMapToLocation(48.856613, 2.352222));
         moveToSubMenu.addItem("New York", e -> moveMapToLocation(40.712776, -74.005974));
 
-        menuBar.addItem("Zoom In", e -> map.getView().setZoom(map.getView().getZoom() + 1));
-        menuBar.addItem("Zoom Out", e -> map.getView().setZoom(map.getView().getZoom() - 1));
 
         return menuBar;
     }
